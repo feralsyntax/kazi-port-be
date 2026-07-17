@@ -5,7 +5,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.decorators import permission_classes
 from rest_framework.views import APIView
 
-from kazi_app.serializers import RegisterUserSerializer
+from kazi_app.serializers import LoginUserSerializer, RegisterUserSerializer
 
 # Create your views here.
 
@@ -31,3 +31,18 @@ class RegisterUserView(APIView):
             generate_token(user),
             status=status.HTTP_201_CREATED
         )
+
+
+@permission_classes([AllowAny,])
+class LoginUserView(APIView):
+    def post(self, request):
+        serializer = LoginUserSerializer(
+            data=request.data,
+            context={"request": request}
+        )
+
+        serializer.is_valid(raise_exception=True)
+
+        user = serializer.validated_data["user"]
+
+        return Response(generate_token(user))
