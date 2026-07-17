@@ -1,18 +1,26 @@
 from pathlib import Path
 from decouple import config
+import dj_database_url
+
+
+# Basic Configurations
+SECRET_KEY = config('SECRET_KEY')
+MODE = config('MODE', default='dev', cast=str)
+DEBUG = config('DEBUG', default=True, cast=bool)
+CORS_ORIGIN_ALLOW_ALL = config('CORS_ORIGIN_ALLOW_ALL', default=False, cast=bool)
+CORS_ORIGIN_WHITELIST = config(
+    'CORS_ORIGIN_WHITELIST', default='http://127.0.0.1:8000', cast=lambda v: [
+        s.strip() for s in v.split(',')
+    ]
+)
+ALLOWED_HOSTS = config(
+    'ALLOWED_HOSTS', default='127.0.0.1', cast=lambda v: [
+        s.strip() for s in v.split(',')
+    ]
+)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-SECRET_KEY = config('SECRET_KEY')
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
 
 
 # Application definition
